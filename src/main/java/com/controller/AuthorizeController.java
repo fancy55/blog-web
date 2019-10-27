@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Controller  //把当前类作为路由api的承载着
@@ -33,7 +35,7 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
                            @RequestParam(name="state") String state,
-                           HttpServletRequest request){//参数接收,session是在request中拿到的
+                           HttpServletRequest request, HttpServletResponse response){//参数接收,session是在request中拿到的
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setClient_secret(clientSecret);
@@ -47,14 +49,16 @@ public class AuthorizeController {
             //登陆成功，写cookie和session
             System.out.println("login ok");
             User user = new User();
+            String token = UUID.randomUUID().toString();//生成
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setToken(UUID.randomUUID().toString());
+            user.setToken(token);
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             System.out.println(user.toString());
             userMapper.insert(user);
-            request.getSession().setAttribute("user",githubUser);//在银行中创建账户成功，但还没给前端银行卡
+            response.addCookie(new Cookie("token",token));//k-v 为了做持久化登录
+            //request.getSession().setAttribute("user",githubUser);//在银行中创建账户成功，但还没给前端银行卡
             return "redirect:/";//用前缀，就重定向；否则只是渲染一下
         }else{
             System.out.println("login err");
