@@ -4,10 +4,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BlogqApplication {
+//@MapperScan("com.mapper.UserMapper")
+public class BlogApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BlogqApplication.class, args);
+        SpringApplication.run(BlogApplication.class, args);
     }
 
 }
