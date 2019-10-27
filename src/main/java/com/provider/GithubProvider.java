@@ -22,8 +22,8 @@ public class GithubProvider {
         try (Response response = client.newCall(request).execute()) {
             String string = response.body().string();
             String token = string.split("&")[0].split("=")[1];
-            //System.out.println(token);
-            return string;
+            System.out.println("token:"+token);
+            return token;
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -36,9 +36,11 @@ public class GithubProvider {
                 .url("https://api.github.com/user?access_token="+accessToken)
                 .build();
         try {
+            //System.out.println(accessToken);
             Response response = client.newCall(request).execute();
             String string = response.body().string();
             GithubUser githubUser = JSON.parseObject(string, GithubUser.class);//把json string自动解析为java类对象
+            System.out.println(string+"\n"+"githubUser:"+githubUser);
             return githubUser;
         }catch(IOException e){
         }
