@@ -9,3 +9,12 @@ body{
     float: right;
     margin-bottom: 15px;
 }
+.img-circle{
+    width: 38px;
+    height: 38px;
+}
+.text-doc{
+    font-size: 12px;
+    font-weight: normal;
+    color: #adadad;
+}
